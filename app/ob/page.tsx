@@ -55,7 +55,7 @@ export default function OBPage() {
 
       {/* ── Nav ── */}
       <nav className="shrink-0 bg-white/90 backdrop-blur-xl border-b border-black/[0.08]">
-        <div className="max-w-6xl mx-auto px-8 h-12 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-4 h-12 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 rounded-md bg-[#f97316] flex items-center justify-center">
               <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24">
