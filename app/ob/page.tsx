@@ -61,10 +61,10 @@ export default function OBPage() {
           商图智造 · 电商素材全链路 Agent
         </p>
         <h1 className="text-5xl md:text-6xl font-bold text-[#1d1d1f] leading-[1.08] tracking-tight mb-6 max-w-3xl mx-auto">
-          三个让电商人<br />夜不能寐的瞬间
+          困扰电商人的<br />3 个日常难题
         </h1>
         <p className="text-xl text-[#6e6e73] max-w-xl mx-auto leading-relaxed">
-          这些不是极端案例。这是每天都在发生的事。
+          从出图到上架，耗时又费力。<br />交给我们，让上新变得简单点。
         </p>
       </section>
 
