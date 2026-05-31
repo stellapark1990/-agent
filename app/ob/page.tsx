@@ -121,30 +121,7 @@ export default function OBPage() {
         </section>
       ))}
 
-      {/* ── CTA ── */}
-      <section className="py-32 px-8 bg-white text-center">
-        <p className="text-[#f97316] text-sm font-semibold tracking-widest uppercase mb-5">
-          现在开始
-        </p>
-        <h2 className="text-5xl font-bold text-[#1d1d1f] tracking-tight mb-5">
-          坑踩够了吗？
-        </h2>
-        <p className="text-xl text-[#6e6e73] mb-10">
-          0 设计基础，1 分钟完成电商主图套图上架
-        </p>
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 bg-[#f97316] hover:bg-[#ea6c0a] text-white text-base font-semibold px-8 py-4 rounded-full transition-all duration-200 shadow-[0_4px_32px_rgba(249,115,22,0.35)] hover:shadow-[0_8px_40px_rgba(249,115,22,0.45)] hover:-translate-y-0.5"
-        >
-          免费开始使用
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-          </svg>
-        </Link>
-        <p className="text-[#b0b0b5] text-sm mt-5">无需注册 · 即开即用</p>
-      </section>
-
-      {/* ── Footer ── */}
+{/* ── Footer ── */}
       <footer className="border-t border-black/[0.08] py-6 px-8">
         <p className="text-center text-[#b0b0b5] text-xs">
           © 2026 商图智造 · Powered by Qwen
