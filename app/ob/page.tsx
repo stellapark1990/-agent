@@ -65,9 +65,6 @@ export default function OBPage() {
             <span className="text-[13px] font-semibold text-[#1d1d1f] tracking-tight">商图智造</span>
             <span className="text-[13px] text-[#6e6e73] tracking-tight">电商素材全链路 Agent</span>
           </div>
-          <Link href="/" className="text-[13px] font-medium text-[#f97316] hover:opacity-80 transition-opacity">
-            免费开始使用 →
-          </Link>
         </div>
       </nav>
 
@@ -141,6 +138,21 @@ export default function OBPage() {
           />
         ))}
       </div>
+
+      {/* ── 左下角按钮 ── */}
+      <Link
+        href="/"
+        className="fixed bottom-6 left-6 z-50 flex items-center gap-2 px-5 py-3 rounded-2xl text-sm font-semibold text-[#1d1d1f] border border-white/40 hover:border-white/70 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
+        style={{
+          background: "rgba(255,255,255,0.55)",
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          boxShadow: "0 4px 24px rgba(0,0,0,0.08)",
+        }}
+      >
+        <span className="w-2 h-2 rounded-full bg-[#f97316]" />
+        免费开始使用
+      </Link>
 
     </div>
   );
