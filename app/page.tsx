@@ -1404,7 +1404,7 @@ export default function Home() {
                   {/* iPhone 17 手机框架（真实图片） */}
                   <div
                     className="relative overflow-hidden"
-                    style={{ width: 280, height: 570, isolation: "isolate" }}
+                    style={{ width: 280, height: 570, isolation: "isolate", borderRadius: 44 }}
                   >
                     {/* 屏幕内容层（在图片之下） */}
                     <div
