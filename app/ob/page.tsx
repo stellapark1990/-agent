@@ -32,15 +32,29 @@ const SCENES = [
   },
 ];
 
+const CARD_W = 300; // px
+
+function getTransform(pos: "left" | "center" | "right") {
+  if (pos === "center") return { transform: "translateX(0) rotate(0deg) scale(1)", zIndex: 10, brightness: 1 };
+  if (pos === "left")   return { transform: `translateX(-${CARD_W * 0.78}px) rotate(-8deg) scale(0.92)`, zIndex: 4, brightness: 0.82 };
+  return                       { transform: `translateX(${CARD_W * 0.78}px) rotate(8deg) scale(0.92)`, zIndex: 4, brightness: 0.82 };
+}
+
 export default function OBPage() {
-  const [active, setActive] = useState(0);
-  const s = SCENES[active];
+  const [active, setActive] = useState(1);
+
+  const getPos = (i: number): "left" | "center" | "right" => {
+    const diff = ((i - active) % 3 + 3) % 3;
+    if (diff === 0) return "center";
+    if (diff === 1) return "right";
+    return "left";
+  };
 
   return (
-    <div className="h-screen bg-[#f5f5f7] flex flex-col font-sans overflow-hidden">
+    <div className="h-screen flex flex-col font-sans overflow-hidden" style={{ background: "#f0f0f2" }}>
 
       {/* ── Nav ── */}
-      <nav className="shrink-0 bg-white/80 backdrop-blur-xl border-b border-black/[0.08]">
+      <nav className="shrink-0 bg-white/90 backdrop-blur-xl border-b border-black/[0.08]">
         <div className="max-w-6xl mx-auto px-8 h-12 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 rounded-md bg-[#f97316] flex items-center justify-center">
@@ -51,10 +65,7 @@ export default function OBPage() {
             <span className="text-[13px] font-semibold text-[#1d1d1f] tracking-tight">商图智造</span>
             <span className="text-[13px] text-[#6e6e73] tracking-tight">电商素材全链路 Agent</span>
           </div>
-          <Link
-            href="/"
-            className="text-[13px] font-medium text-[#f97316] hover:opacity-80 transition-opacity"
-          >
+          <Link href="/" className="text-[13px] font-medium text-[#f97316] hover:opacity-80 transition-opacity">
             免费开始使用 →
           </Link>
         </div>
@@ -70,64 +81,57 @@ export default function OBPage() {
         </p>
       </div>
 
-      {/* ── Card Carousel ── */}
-      <div className="flex-1 flex items-center justify-center px-12 py-6 min-h-0 relative">
+      {/* ── Card Fan ── */}
+      <div className="flex-1 flex items-center justify-center relative overflow-hidden">
+        {SCENES.map((s, i) => {
+          const pos = getPos(i);
+          const { transform, zIndex, brightness } = getTransform(pos);
+          const isCenter = pos === "center";
 
-        {/* 左箭头 */}
-        <button
-          onClick={() => setActive((active - 1 + SCENES.length) % SCENES.length)}
-          className="absolute left-4 z-10 w-9 h-9 rounded-full bg-white shadow-md border border-black/[0.06] flex items-center justify-center hover:shadow-lg transition-shadow"
-        >
-          <svg className="w-4 h-4 text-[#1d1d1f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
+          return (
+            <div
+              key={i}
+              onClick={() => !isCenter && setActive(i)}
+              style={{
+                position: "absolute",
+                width: CARD_W,
+                transform,
+                zIndex,
+                filter: `brightness(${brightness})`,
+                transition: "all 0.45s cubic-bezier(0.4, 0, 0.2, 1)",
+                cursor: isCenter ? "default" : "pointer",
+              }}
+              className={`rounded-3xl overflow-hidden shadow-2xl flex flex-col ${s.dark ? "bg-[#1d1d1f]" : "bg-white"}`}
+            >
+              {/* 图片 4:3 */}
+              <div style={{ aspectRatio: "4/3", width: "100%", flexShrink: 0, overflow: "hidden" }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={s.img} alt={s.problem} className="w-full h-full object-cover object-top" />
+              </div>
 
-        {/* 卡片 */}
-        <div
-          className={`w-full max-w-lg h-full rounded-3xl overflow-hidden flex flex-col shadow-xl transition-all duration-300 ${s.dark ? "bg-[#1d1d1f]" : "bg-white"}`}
-        >
-          {/* 图片区：4:3 比例容器 */}
-          <div className="w-full shrink-0" style={{ aspectRatio: "4/3" }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={s.img}
-              alt={s.problem}
-              className="w-full h-full object-cover object-top"
-            />
-          </div>
-
-          {/* 文字区：撑满剩余空间，内部可滚动 */}
-          <div className="flex-1 overflow-y-auto flex flex-col gap-3 p-6">
-            <p className="text-[#f97316] text-[11px] font-semibold tracking-widest uppercase">
-              {s.label}
-            </p>
-            <h2 className={`text-xl font-bold leading-snug ${s.dark ? "text-white" : "text-[#1d1d1f]"}`}>
-              {s.problem}
-            </h2>
-            <p className={`text-sm leading-relaxed ${s.dark ? "text-[#a1a1a6]" : "text-[#6e6e73]"}`}>
-              {s.desc}
-            </p>
-            <div className={`rounded-2xl px-5 py-4 border ${s.dark ? "bg-white/[0.06] border-white/[0.08]" : "bg-[#f5f5f7] border-black/[0.04]"}`}>
-              <p className={`text-sm font-bold mb-1 ${s.dark ? "text-white" : "text-[#1d1d1f]"}`}>
-                {s.fix}
-              </p>
-              <p className={`text-sm leading-relaxed ${s.dark ? "text-[#a1a1a6]" : "text-[#6e6e73]"}`}>
-                {s.fixDesc}
-              </p>
+              {/* 文字 */}
+              <div className="flex flex-col gap-2 p-5">
+                <p className="text-[#f97316] text-[10px] font-semibold tracking-widest uppercase">
+                  {s.label}
+                </p>
+                <h2 className={`text-[15px] font-bold leading-snug ${s.dark ? "text-white" : "text-[#1d1d1f]"}`}>
+                  {s.problem}
+                </h2>
+                <p className={`text-xs leading-relaxed ${s.dark ? "text-[#a1a1a6]" : "text-[#6e6e73]"}`}>
+                  {s.desc}
+                </p>
+                <div className={`rounded-xl px-4 py-3 border ${s.dark ? "bg-white/[0.06] border-white/[0.08]" : "bg-[#f5f5f7] border-black/[0.04]"}`}>
+                  <p className={`text-xs font-bold mb-0.5 ${s.dark ? "text-white" : "text-[#1d1d1f]"}`}>
+                    {s.fix}
+                  </p>
+                  <p className={`text-[11px] leading-relaxed ${s.dark ? "text-[#a1a1a6]" : "text-[#6e6e73]"}`}>
+                    {s.fixDesc}
+                  </p>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-
-        {/* 右箭头 */}
-        <button
-          onClick={() => setActive((active + 1) % SCENES.length)}
-          className="absolute right-4 z-10 w-9 h-9 rounded-full bg-white shadow-md border border-black/[0.06] flex items-center justify-center hover:shadow-lg transition-shadow"
-        >
-          <svg className="w-4 h-4 text-[#1d1d1f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
+          );
+        })}
       </div>
 
       {/* ── Dots ── */}
@@ -136,16 +140,14 @@ export default function OBPage() {
           <button
             key={i}
             onClick={() => setActive(i)}
-            className={`rounded-full transition-all duration-200 ${i === active ? "w-5 h-2 bg-[#f97316]" : "w-2 h-2 bg-black/20"}`}
+            className={`rounded-full transition-all duration-300 ${i === active ? "w-5 h-2 bg-[#f97316]" : "w-2 h-2 bg-black/20"}`}
           />
         ))}
       </div>
 
       {/* ── Footer ── */}
       <div className="shrink-0 border-t border-black/[0.06] py-3 px-8 bg-white">
-        <p className="text-center text-[#b0b0b5] text-xs">
-          © 2026 商图智造 · Powered by Qwen
-        </p>
+        <p className="text-center text-[#b0b0b5] text-xs">© 2026 商图智造 · Powered by Qwen</p>
       </div>
 
     </div>
