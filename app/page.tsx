@@ -415,7 +415,20 @@ export default function Home() {
   const handleFileSelect = useCallback((file: File) => {
     if (!file.type.startsWith("image/")) return;
     const reader = new FileReader();
-    reader.onload = (e) => setUploadedImage(e.target?.result as string);
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        // 压缩到最长边 1024px，避免 base64 超过 Vercel 4.5MB 请求体限制
+        const MAX = 1024;
+        const scale = Math.min(1, MAX / Math.max(img.width, img.height));
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.round(img.width * scale);
+        canvas.height = Math.round(img.height * scale);
+        canvas.getContext("2d")!.drawImage(img, 0, 0, canvas.width, canvas.height);
+        setUploadedImage(canvas.toDataURL("image/jpeg", 0.85));
+      };
+      img.src = e.target?.result as string;
+    };
     reader.readAsDataURL(file);
   }, []);
 

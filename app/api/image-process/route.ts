@@ -2,13 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { generate3DRender } from "@/lib/hunyuan";
 
 export const runtime = "nodejs";
-export const maxDuration = 120; // 轮询最长 2 分钟
+export const maxDuration = 55; // Vercel Hobby 上限 60s，留 5s 余量
 
 const API_KEY = process.env.DASHSCOPE_API_KEY!;
 
 // ─── DashScope 工具 ──────────────────────────────────────────────────────────
 
-async function pollDashScope(taskId: string, maxTries = 30): Promise<string> {
+async function pollDashScope(taskId: string, maxTries = 15): Promise<string> {
   for (let i = 0; i < maxTries; i++) {
     await new Promise((r) => setTimeout(r, 3000));
     const res = await fetch(`https://dashscope.aliyuncs.com/api/v1/tasks/${taskId}`, {
