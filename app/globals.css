@@ -2,25 +2,102 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #0b1c30;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-hanken), var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+}
+
+/* ── Silk / Liquid background animations ── */
+
+/* 大范围缓慢漂移 — 营造液态流动感 */
+@keyframes silk-drift-a {
+  0%   { transform: translate(0, 0) scale(1) rotate(0deg); }
+  20%  { transform: translate(3%, -4%) scale(1.04) rotate(1deg); }
+  45%  { transform: translate(6%, 3%) scale(0.97) rotate(-1.5deg); }
+  70%  { transform: translate(-2%, 6%) scale(1.06) rotate(2deg); }
+  100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+}
+
+/* 反向漂移 — 与 drift-a 形成交错错位 */
+@keyframes silk-drift-b {
+  0%   { transform: translate(0, 0) scale(1) rotate(0deg); }
+  30%  { transform: translate(-4%, -3%) rotate(-2deg) scale(1.05); }
+  60%  { transform: translate(3%, 5%) rotate(1.5deg) scale(0.96); }
+  100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+}
+
+/* 垂直浮动 — 像丝绸随气流升降 */
+@keyframes silk-float {
+  0%   { transform: translateY(0) scale(1); }
+  40%  { transform: translateY(-28px) scale(1.03); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+/* 柔和呼吸 — opacity 微变制造光晕脉冲 */
+@keyframes silk-pulse {
+  0%, 100% { opacity: 0.55; }
+  50%       { opacity: 0.85; }
+}
+
+/* 慢速旋转漂移 — 大型背景光晕 */
+@keyframes silk-drift-slow {
+  0%   { transform: translate(0, 0) scale(1); }
+  25%  { transform: translate(2%, 3%) scale(1.03); }
+  50%  { transform: translate(-3%, 1%) scale(0.98); }
+  75%  { transform: translate(1%, -3%) scale(1.04); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+.animate-silk-a    { animation: silk-drift-a    28s ease-in-out infinite; }
+.animate-silk-b    { animation: silk-drift-b    35s ease-in-out infinite; }
+.animate-silk-float{ animation: silk-float      20s ease-in-out infinite; }
+.animate-silk-pulse{ animation: silk-pulse      14s ease-in-out infinite; }
+.animate-silk-slow { animation: silk-drift-slow 45s ease-in-out infinite; }
+
+/* 向后兼容旧类名（step 2/3/4 如有使用） */
+.animate-mesh      { animation: silk-drift-a    28s ease-in-out infinite; }
+.animate-mesh-alt  { animation: silk-drift-b    35s ease-in-out infinite; }
+.animate-pulse-soft{ animation: silk-pulse      14s ease-in-out infinite; }
+
+/* ── Silk blob 色板 — 白色主调 + 浅橙暖光 ── */
+
+/* 主光晕：温暖橙金，大面积柔化 */
+.silk-blob-a {
+  background: radial-gradient(ellipse at 40% 50%, rgba(255, 185, 120, 0.55) 0%, rgba(255, 210, 160, 0.25) 45%, transparent 70%);
+  filter: blur(130px);
+}
+
+/* 副光晕：奶油橙，大范围弥散 */
+.silk-blob-b {
+  background: radial-gradient(ellipse at 60% 50%, rgba(255, 225, 180, 0.45) 0%, rgba(255, 240, 210, 0.2) 50%, transparent 72%);
+  filter: blur(150px);
+}
+
+/* 高光点：偏暖白，制造局部亮度层次 */
+.silk-blob-c {
+  background: radial-gradient(ellipse at center, rgba(255, 200, 140, 0.40) 0%, rgba(255, 230, 200, 0.15) 45%, transparent 68%);
+  filter: blur(110px);
+}
+
+/* 深层底光：极淡橙，覆盖大面积制造温度感 */
+.silk-blob-d {
+  background: radial-gradient(ellipse at center, rgba(255, 245, 225, 0.60) 0%, transparent 65%);
+  filter: blur(100px);
+}
+
+/* 轻量边缘光：烘托白色主调的空气感 */
+.silk-blob-e {
+  background: radial-gradient(ellipse at center, rgba(255, 168, 90, 0.18) 0%, transparent 60%);
+  filter: blur(90px);
 }
