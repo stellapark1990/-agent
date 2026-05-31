@@ -4,7 +4,7 @@ import Link from "next/link";
 const PAINS = [
   {
     img: "/1.png",
-    tag: "痛点 01",
+    tag: "01",
     tagColor: "#ef4444",
     title: "AI 生成驴唇不对马嘴？尺寸不对？",
     desc: "生成的图片商品对不上、尺寸不合规、上传平台直接被拒——白白浪费时间和金钱。",
@@ -18,7 +18,7 @@ const PAINS = [
   },
   {
     img: "/2.png",
-    tag: "痛点 02",
+    tag: "02",
     tagColor: "#f97316",
     title: "踩广告法红线？一个字被罚一万？",
     desc: "\"最\"、\"第一\"、\"唯一\" 这些词 AI 随手就写，商家毫不知情，直到接到平台扣分或罚款通知。",
@@ -32,7 +32,7 @@ const PAINS = [
   },
   {
     img: "/3.png",
-    tag: "痛点 03",
+    tag: "03",
     tagColor: "#8b5cf6",
     title: "大促改图累瘫？每次都要重头来？",
     desc: "618、双11、中秋……每个节点都得重新做图，一套图弄三天，大促还没结束人先倒。",
