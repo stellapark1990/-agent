@@ -2549,7 +2549,7 @@ export default function Home() {
               <div className="text-center space-y-3">
                 <h2 className="text-2xl font-bold text-[#0b1c30]">0 设计基础，1 分钟完成电商主图套图上架</h2>
                 <p className="text-sm text-[#6b7280] max-w-lg mx-auto leading-relaxed">
-                  以商品信息为输入，自动完成竞品分析 → 分镜策划 → 图片生成 → 文案撰写 → 合规检测，输出可直接上架的完整素材包。
+                  输入商品，AI秒出全套高转化图文！自动排雷违禁词确保过审，更随季节热点全自动翻新素材
                 </p>
               </div>
 
