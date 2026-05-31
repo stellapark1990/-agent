@@ -139,18 +139,17 @@ export default function OBPage() {
         ))}
       </div>
 
-      {/* ── 左下角按钮 ── */}
+      {/* ── 右下角按钮 ── */}
       <Link
         href="/"
-        className="fixed bottom-6 left-6 z-50 flex items-center gap-2 px-5 py-3 rounded-2xl text-sm font-semibold text-[#1d1d1f] border border-white/40 hover:border-white/70 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
+        className="fixed bottom-6 right-6 z-50 px-5 py-2.5 rounded-full text-sm font-medium text-[#3d3d3d] transition-all duration-200 hover:-translate-y-0.5"
         style={{
-          background: "rgba(255,255,255,0.55)",
-          backdropFilter: "blur(20px)",
-          WebkitBackdropFilter: "blur(20px)",
-          boxShadow: "0 4px 24px rgba(0,0,0,0.08)",
+          background: "rgba(180,180,185,0.45)",
+          backdropFilter: "blur(16px)",
+          WebkitBackdropFilter: "blur(16px)",
+          boxShadow: "0 4px 20px rgba(0,0,0,0.12)",
         }}
       >
-        <span className="w-2 h-2 rounded-full bg-[#f97316]" />
         免费开始使用
       </Link>
 
