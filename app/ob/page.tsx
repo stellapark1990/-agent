@@ -109,8 +109,8 @@ export default function OBPage() {
               {s.desc}
             </p>
             <div className={`rounded-2xl px-5 py-4 border ${s.dark ? "bg-white/[0.06] border-white/[0.08]" : "bg-[#f5f5f7] border-black/[0.04]"}`}>
-              <p className="text-[#f97316] text-[10px] font-semibold tracking-widest uppercase mb-1">
-                商图智造的解法 · {s.fix}
+              <p className={`text-sm font-bold mb-1 ${s.dark ? "text-white" : "text-[#1d1d1f]"}`}>
+                {s.fix}
               </p>
               <p className={`text-sm leading-relaxed ${s.dark ? "text-[#a1a1a6]" : "text-[#6e6e73]"}`}>
                 {s.fixDesc}
