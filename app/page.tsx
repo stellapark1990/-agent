@@ -179,6 +179,7 @@ export default function Home() {
   // Step 3 — AI 生图
   const [generatedImages, setGeneratedImages] = useState<Record<number, string>>({});
   const [generatingSlots, setGeneratingSlots] = useState<Set<number>>(new Set());
+  const [imageErrors, setImageErrors] = useState<Record<number, string>>({});
   const [selectedSlot, setSelectedSlot] = useState(1);
 
   // Projects — persisted to localStorage
@@ -295,43 +296,50 @@ export default function Home() {
     throw new Error("等待超时");
   };
 
-  // Step 3 进场：提交生图任务，前端持续轮询直到完成
+  // 提交生图任务并轮询，支持 wan2.5-i2i → wanx-v1 自动降级
+  const generateOneSlot = async (slot: number, scenePrompt: string) => {
+    // 尝试 wan2.5-i2i（图生图，质量更好）
+    try {
+      const submitRes = await fetch("/api/image-process", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ imageBase64: uploadedImage, variant: "scene", scenePrompt }),
+      });
+      const submitData = await submitRes.json();
+      if (submitData.success && submitData.taskId) {
+        const url = await pollUntilDone(submitData.taskId);
+        return url;
+      }
+      if (submitData.success && submitData.url) return submitData.url;
+      throw new Error(submitData.error ?? "提交失败");
+    } catch (e1) {
+      // wan2.5-i2i 失败 → 降级到 wanx-v1 文生图
+      setImageErrors((prev) => ({ ...prev, [slot]: `i2i失败，降级文生图：${String(e1)}` }));
+      const submitRes = await fetch("/api/image-process", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ variant: "wanx", scenePrompt }),
+      });
+      const submitData = await submitRes.json();
+      if (!submitData.success) throw new Error(submitData.error ?? "文生图提交失败");
+      return await pollUntilDone(submitData.taskId);
+    }
+  };
+
+  // Step 3 进场：并行生成全部分镜图
   useEffect(() => {
     if (step !== 3 || !analysis || !uploadedImage) return;
     analysis.imageScripts.forEach(async (script) => {
       if (generatedImages[script.slot]) return;
       setGeneratingSlots((prev) => new Set([...prev, script.slot]));
+      setImageErrors((prev) => { const n = { ...prev }; delete n[script.slot]; return n; });
       try {
-        // 1. 提交任务，立即拿到 taskId（~2s，不受 Vercel 超时影响）
-        const submitRes = await fetch("/api/image-process", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            imageBase64: uploadedImage,
-            variant: "scene",
-            scenePrompt: script.scenePrompt,
-          }),
-        });
-        const submitData = await submitRes.json();
-        if (!submitData.success) throw new Error(submitData.error);
-
-        // 2. 如果直接返回了 url（3d 等同步模式），直接用
-        if (submitData.url) {
-          setGeneratedImages((prev) => ({ ...prev, [script.slot]: submitData.url }));
-          return;
-        }
-
-        // 3. 前端轮询状态，最多等 5 分钟
-        const url = await pollUntilDone(submitData.taskId);
+        const url = await generateOneSlot(script.slot, script.scenePrompt);
         setGeneratedImages((prev) => ({ ...prev, [script.slot]: url }));
-      } catch {
-        // 生图失败时静默降级到文案占位
+      } catch (err) {
+        setImageErrors((prev) => ({ ...prev, [script.slot]: String(err) }));
       } finally {
-        setGeneratingSlots((prev) => {
-          const s = new Set(prev);
-          s.delete(script.slot);
-          return s;
-        });
+        setGeneratingSlots((prev) => { const s = new Set(prev); s.delete(script.slot); return s; });
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -62,6 +62,30 @@ export async function POST(req: NextRequest) {
           "场景图"
         );
         break;
+      case "wanx": {
+        // 纯文生图降级方案（不需要 imageBase64）
+        const wanxRes = await fetch(
+          "https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis",
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${API_KEY}`,
+              "Content-Type": "application/json",
+              "X-DashScope-Async": "enable",
+            },
+            body: JSON.stringify({
+              model: "wanx-v1",
+              input: { prompt: scenePrompt || "commercial product photography" },
+              parameters: { size: "1024*1024", n: 1, style: "<photography>" },
+            }),
+          }
+        );
+        const wanxData = await wanxRes.json();
+        if (!wanxRes.ok || !wanxData.output?.task_id)
+          throw new Error(wanxData.message ?? "wanx任务提交失败");
+        taskId = wanxData.output.task_id;
+        break;
+      }
       case "3d":
         // 3D 渲染走腾讯混元，保持原有同步逻辑
         const url = await generate3DRender(productDesc || "product", imageBase64);
