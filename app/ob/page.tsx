@@ -56,11 +56,11 @@ export default function OBPage() {
       </nav>
 
       {/* ── Hero ── */}
-      <section className="pt-40 pb-28 px-8 text-center bg-white">
-        <p className="text-[#f97316] text-sm font-semibold tracking-widest uppercase mb-5">
+      <section className="pt-24 pb-14 px-8 text-center bg-white">
+        <p className="text-[#f97316] text-sm font-semibold tracking-widest uppercase mb-3">
           商图智造 · 电商素材全链路 Agent
         </p>
-        <h1 className="text-3xl md:text-4xl font-bold text-[#1d1d1f] leading-[1.08] tracking-tight mb-6 max-w-3xl mx-auto">
+        <h1 className="text-3xl md:text-4xl font-bold text-[#1d1d1f] leading-[1.08] tracking-tight mb-4 max-w-3xl mx-auto">
           困扰电商人的 3 个日常难题
         </h1>
         <p className="text-xl text-[#6e6e73] max-w-xl mx-auto leading-relaxed">
