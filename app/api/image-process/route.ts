@@ -75,9 +75,29 @@ async function generateTextureBg(base64DataUrl: string): Promise<string> {
   );
 }
 
-// 套图场景图：直接使用 analyze 生成的结构化英文 prompt
-async function generateSceneImg(base64DataUrl: string, scenePrompt: string): Promise<string> {
-  return callWan25Edit(base64DataUrl, scenePrompt, "场景图");
+// 套图场景图：用 analyze 生成的结构化英文 prompt 直接文生图（wanx-v1）
+async function generateSceneImg(scenePrompt: string): Promise<string> {
+  const res = await fetch(
+    "https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis",
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${API_KEY}`,
+        "Content-Type": "application/json",
+        "X-DashScope-Async": "enable",
+      },
+      body: JSON.stringify({
+        model: "wanx-v1",
+        input: { prompt: scenePrompt },
+        parameters: { size: "1024*1024", n: 1, style: "<photography>" },
+      }),
+    }
+  );
+  const data = await res.json();
+  if (!res.ok || !data.output?.task_id) {
+    throw new Error(data.message ?? data.code ?? "场景图任务创建失败");
+  }
+  return pollDashScope(data.output.task_id);
 }
 
 // ─── 单 variant 生成（同步返回 JSON）────────────────────────────────────────
@@ -98,7 +118,7 @@ export async function POST(req: NextRequest) {
         url = await generate3DRender(productDesc || "product", imageBase64);
         break;
       case "scene":
-        url = await generateSceneImg(imageBase64, scenePrompt || "clean product photography");
+        url = await generateSceneImg(scenePrompt || "clean product photography, white background");
         break;
       default:
         return NextResponse.json({ success: false, error: `未知 variant: ${variant}` }, { status: 400 });
