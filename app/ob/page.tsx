@@ -142,11 +142,6 @@ export default function OBPage() {
         ))}
       </div>
 
-      {/* ── Footer ── */}
-      <div className="shrink-0 border-t border-black/[0.06] py-3 px-8 bg-white">
-        <p className="text-center text-[#b0b0b5] text-xs">© 2026 商图智造 · Powered by Qwen</p>
-      </div>
-
     </div>
   );
 }
