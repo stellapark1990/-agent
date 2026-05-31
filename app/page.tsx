@@ -2531,6 +2531,10 @@ export default function Home() {
                   </svg>
                 </div>
                 <span className="text-[15px] font-bold text-[#0b1c30]">商图智造 · 产品说明</span>
+                <span className="inline-flex items-center gap-1 bg-[#fff7ed] border border-[#f97316]/20 text-[#f97316] text-xs font-semibold px-2.5 py-1 rounded-full">
+                  <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                  AI 驱动 · 全链路自动化
+                </span>
               </div>
               <button onClick={() => setShowProductGuide(false)} className="w-8 h-8 rounded-full bg-black/[0.06] hover:bg-black/[0.1] flex items-center justify-center transition-colors">
                 <svg className="w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2543,10 +2547,6 @@ export default function Home() {
 
               {/* Hero */}
               <div className="text-center space-y-3">
-                <div className="inline-flex items-center gap-2 bg-[#fff7ed] border border-[#f97316]/20 text-[#f97316] text-xs font-semibold px-3 py-1.5 rounded-full">
-                  <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-                  AI 驱动 · 全链路自动化
-                </div>
                 <h2 className="text-2xl font-bold text-[#0b1c30]">0 设计基础，1 分钟完成电商主图套图上架</h2>
                 <p className="text-sm text-[#6b7280] max-w-lg mx-auto leading-relaxed">
                   以商品信息为输入，自动完成竞品分析 → 分镜策划 → 图片生成 → 文案撰写 → 合规检测，输出可直接上架的完整素材包。
