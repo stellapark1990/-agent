@@ -63,8 +63,8 @@ export default function OBPage() {
         <h1 className="text-3xl md:text-4xl font-bold text-[#1d1d1f] leading-[1.08] tracking-tight mb-4 max-w-3xl mx-auto">
           困扰电商人的 3 个日常难题
         </h1>
-        <p className="text-xl text-[#6e6e73] max-w-xl mx-auto leading-relaxed">
-          从出图到上架，耗时又费力。<br />交给我们，让上新变得简单点。
+        <p className="text-xl text-[#6e6e73] max-w-2xl mx-auto leading-relaxed">
+          从出图到上架，耗时又费力，交给我们，让上新变得简单点～
         </p>
       </section>
 
