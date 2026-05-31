@@ -45,6 +45,7 @@ export default function OBPage() {
               </svg>
             </div>
             <span className="text-[13px] font-semibold text-[#1d1d1f] tracking-tight">商图智造</span>
+            <span className="text-[13px] text-[#6e6e73] tracking-tight">电商素材全链路 Agent</span>
           </div>
           <Link
             href="/"
@@ -57,9 +58,6 @@ export default function OBPage() {
 
       {/* ── Hero ── */}
       <section className="pt-24 pb-14 px-8 text-center bg-white">
-        <p className="text-[#f97316] text-sm font-semibold tracking-widest uppercase mb-3">
-          商图智造 · 电商素材全链路 Agent
-        </p>
         <h1 className="text-3xl md:text-4xl font-bold text-[#1d1d1f] leading-[1.08] tracking-tight mb-4 max-w-3xl mx-auto">
           困扰电商人的 3 个日常难题
         </h1>
