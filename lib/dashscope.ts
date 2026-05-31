@@ -1,9 +1,20 @@
 import OpenAI from "openai";
 
-export const qwen = new OpenAI({
-  apiKey: process.env.DASHSCOPE_API_KEY,
-  baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
-});
+function getQwen() {
+  return new OpenAI({
+    apiKey: process.env.DASHSCOPE_API_KEY ?? (() => { throw new Error("DASHSCOPE_API_KEY is not set"); })(),
+    baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
+  });
+}
+
+export const qwen = {
+  chat: {
+    completions: {
+      create: (...args: Parameters<OpenAI["chat"]["completions"]["create"]>) =>
+        getQwen().chat.completions.create(...args),
+    },
+  },
+};
 
 // 通义万相图像生成（原生 DashScope API，异步任务模式）
 export async function wanxTextToImage(prompt: string): Promise<string> {
