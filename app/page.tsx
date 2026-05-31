@@ -282,14 +282,28 @@ export default function Home() {
     if (m) setProductPrice(m[1]);
   }, [competitorDesc]);
 
-  // Step 3 进场：自动为每张分镜触发 AI 生图
+  // 前端轮询直到任务完成（无 Vercel 超时限制）
+  const pollUntilDone = async (taskId: string, maxMinutes = 5): Promise<string> => {
+    const deadline = Date.now() + maxMinutes * 60 * 1000;
+    while (Date.now() < deadline) {
+      await new Promise((r) => setTimeout(r, 3000));
+      const res = await fetch(`/api/image-status?taskId=${taskId}`);
+      const data = await res.json();
+      if (data.status === "SUCCEEDED" && data.url) return data.url;
+      if (data.status === "FAILED") throw new Error(data.error ?? "生图任务失败");
+    }
+    throw new Error("等待超时");
+  };
+
+  // Step 3 进场：提交生图任务，前端持续轮询直到完成
   useEffect(() => {
     if (step !== 3 || !analysis || !uploadedImage) return;
     analysis.imageScripts.forEach(async (script) => {
       if (generatedImages[script.slot]) return;
       setGeneratingSlots((prev) => new Set([...prev, script.slot]));
       try {
-        const res = await fetch("/api/image-process", {
+        // 1. 提交任务，立即拿到 taskId（~2s，不受 Vercel 超时影响）
+        const submitRes = await fetch("/api/image-process", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -298,10 +312,18 @@ export default function Home() {
             scenePrompt: script.scenePrompt,
           }),
         });
-        const data = await res.json();
-        if (data.success && data.url) {
-          setGeneratedImages((prev) => ({ ...prev, [script.slot]: data.url }));
+        const submitData = await submitRes.json();
+        if (!submitData.success) throw new Error(submitData.error);
+
+        // 2. 如果直接返回了 url（3d 等同步模式），直接用
+        if (submitData.url) {
+          setGeneratedImages((prev) => ({ ...prev, [script.slot]: submitData.url }));
+          return;
         }
+
+        // 3. 前端轮询状态，最多等 5 分钟
+        const url = await pollUntilDone(submitData.taskId);
+        setGeneratedImages((prev) => ({ ...prev, [script.slot]: url }));
       } catch {
         // 生图失败时静默降级到文案占位
       } finally {
