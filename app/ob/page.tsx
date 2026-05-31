@@ -87,18 +87,17 @@ export default function OBPage() {
         <div
           className={`w-full max-w-lg h-full rounded-3xl overflow-hidden flex flex-col shadow-xl transition-all duration-300 ${s.dark ? "bg-[#1d1d1f]" : "bg-white"}`}
         >
-          {/* 图片区 */}
-          <div className="w-full flex-shrink-0" style={{ height: "55%" }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={s.img}
-              alt={s.problem}
-              className="w-full h-full object-cover object-top"
-            />
-          </div>
+          {/* 图片区：固定像素高度 */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={s.img}
+            alt={s.problem}
+            className="w-full object-cover object-top shrink-0"
+            style={{ height: "280px" }}
+          />
 
-          {/* 文字区 */}
-          <div className="flex flex-col gap-3 p-6" style={{ height: "45%" }}>
+          {/* 文字区：撑满剩余空间，内部可滚动 */}
+          <div className="flex-1 overflow-y-auto flex flex-col gap-3 p-6">
             <p className="text-[#f97316] text-[11px] font-semibold tracking-widest uppercase">
               {s.label}
             </p>
