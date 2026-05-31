@@ -142,7 +142,7 @@ export default function OBPage() {
       {/* ── 右下角按钮 ── */}
       <Link
         href="/"
-        className="fixed bottom-6 right-6 z-50 px-5 py-2.5 rounded-full text-sm font-medium text-[#3d3d3d] transition-all duration-200 hover:-translate-y-0.5"
+        className="fixed bottom-6 right-6 z-50 px-7 py-3 rounded-full text-base font-semibold text-[#f97316] transition-all duration-200 hover:-translate-y-0.5"
         style={{
           background: "rgba(180,180,185,0.45)",
           backdropFilter: "blur(16px)",
