@@ -103,8 +103,8 @@ export default function OBPage() {
               }}
               className={`rounded-3xl overflow-hidden shadow-2xl flex flex-col ${s.dark ? "bg-[#1d1d1f]" : "bg-white"}`}
             >
-              {/* 图片 4:3 */}
-              <div style={{ aspectRatio: "4/3", width: "100%", flexShrink: 0, overflow: "hidden" }}>
+              {/* 图片 3:4 */}
+              <div style={{ aspectRatio: "3/4", width: "100%", flexShrink: 0, overflow: "hidden" }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={s.img} alt={s.problem} className="w-full h-full object-cover object-top" />
               </div>
@@ -117,9 +117,6 @@ export default function OBPage() {
                 <h2 className={`text-[15px] font-bold leading-snug ${s.dark ? "text-white" : "text-[#1d1d1f]"}`}>
                   {s.problem}
                 </h2>
-                <p className={`text-xs leading-relaxed ${s.dark ? "text-[#a1a1a6]" : "text-[#6e6e73]"}`}>
-                  {s.desc}
-                </p>
                 <div className={`rounded-xl px-4 py-3 border ${s.dark ? "bg-white/[0.06] border-white/[0.08]" : "bg-[#f5f5f7] border-black/[0.04]"}`}>
                   <p className={`text-xs font-bold mb-0.5 ${s.dark ? "text-white" : "text-[#1d1d1f]"}`}>
                     {s.fix}
