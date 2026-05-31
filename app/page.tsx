@@ -296,34 +296,17 @@ export default function Home() {
     throw new Error("等待超时");
   };
 
-  // 提交生图任务并轮询，支持 wan2.5-i2i → wanx-v1 自动降级
+  // 提交 wan2.5-i2i 生图任务并轮询
   const generateOneSlot = async (slot: number, scenePrompt: string) => {
-    // 尝试 wan2.5-i2i（图生图，质量更好）
-    try {
-      const submitRes = await fetch("/api/image-process", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ imageBase64: uploadedImage, variant: "scene", scenePrompt }),
-      });
-      const submitData = await submitRes.json();
-      if (submitData.success && submitData.taskId) {
-        const url = await pollUntilDone(submitData.taskId);
-        return url;
-      }
-      if (submitData.success && submitData.url) return submitData.url;
-      throw new Error(submitData.error ?? "提交失败");
-    } catch (e1) {
-      // wan2.5-i2i 失败 → 降级到 wanx-v1 文生图
-      setImageErrors((prev) => ({ ...prev, [slot]: `i2i失败，降级文生图：${String(e1)}` }));
-      const submitRes = await fetch("/api/image-process", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ variant: "wanx", scenePrompt }),
-      });
-      const submitData = await submitRes.json();
-      if (!submitData.success) throw new Error(submitData.error ?? "文生图提交失败");
-      return await pollUntilDone(submitData.taskId);
-    }
+    const submitRes = await fetch("/api/image-process", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ imageBase64: uploadedImage, variant: "scene", scenePrompt }),
+    });
+    const submitData = await submitRes.json();
+    if (!submitData.success) throw new Error(submitData.error ?? "任务提交失败");
+    if (submitData.url) return submitData.url;
+    return await pollUntilDone(submitData.taskId);
   };
 
   // Step 3 进场：并行生成全部分镜图
@@ -446,18 +429,56 @@ export default function Home() {
     if (!file.type.startsWith("image/")) return;
     const reader = new FileReader();
     reader.onload = (e) => {
+      const originalUrl = e.target?.result as string;
       const img = new Image();
-      img.onload = () => {
-        // 压缩到最长边 1024px，避免 base64 超过 Vercel 4.5MB 请求体限制
-        const MAX = 1024;
-        const scale = Math.min(1, MAX / Math.max(img.width, img.height));
-        const canvas = document.createElement("canvas");
-        canvas.width = Math.round(img.width * scale);
-        canvas.height = Math.round(img.height * scale);
-        canvas.getContext("2d")!.drawImage(img, 0, 0, canvas.width, canvas.height);
-        setUploadedImage(canvas.toDataURL("image/jpeg", 0.85));
+
+      const applyImage = (dataUrl: string) => {
+        // 验证 base64 长度，太小（<500字节）说明图片无效
+        const b64 = dataUrl.split(",")[1] ?? "";
+        if (b64.length < 500) {
+          console.error("图片数据无效，base64 过短:", b64.length);
+          return;
+        }
+        setUploadedImage(dataUrl);
       };
-      img.src = e.target?.result as string;
+
+      img.onload = () => {
+        const w = img.naturalWidth || img.width;
+        const h = img.naturalHeight || img.height;
+
+        // 尺寸异常 → 直接用原图
+        if (!w || !h) { applyImage(originalUrl); return; }
+
+        const MIN = 512;  // DashScope wan2.5-i2i 最小 384，留余量
+        const MAX = 1024; // 限制请求体大小
+
+        // 计算缩放：最长边不超过 MAX，最短边不低于 MIN
+        let scale = 1;
+        if (Math.max(w, h) > MAX) scale = MAX / Math.max(w, h);
+        if (Math.min(w, h) * scale < MIN) scale = MIN / Math.min(w, h);
+
+        const newW = Math.max(MIN, Math.round(w * scale));
+        const newH = Math.max(MIN, Math.round(h * scale));
+
+        try {
+          const canvas = document.createElement("canvas");
+          canvas.width = newW;
+          canvas.height = newH;
+          const ctx = canvas.getContext("2d");
+          if (!ctx) { applyImage(originalUrl); return; }
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(0, 0, newW, newH);
+          ctx.drawImage(img, 0, 0, newW, newH);
+          const compressed = canvas.toDataURL("image/jpeg", 0.85);
+          applyImage(compressed);
+        } catch {
+          applyImage(originalUrl);
+        }
+      };
+
+      // 图片解码失败（如 HEIC）→ 直接用原始 data URL
+      img.onerror = () => applyImage(originalUrl);
+      img.src = originalUrl;
     };
     reader.readAsDataURL(file);
   }, []);
