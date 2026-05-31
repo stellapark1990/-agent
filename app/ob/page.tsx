@@ -67,37 +67,36 @@ export default function OBPage() {
       </div>
 
       {/* ── Scenes Grid ── */}
-      <div className="flex-1 px-6 py-5 min-h-0">
-        <div className="max-w-6xl mx-auto h-full grid grid-cols-3 gap-5">
+      <div className="flex-1 px-6 py-5">
+        <div className="max-w-6xl mx-auto grid grid-cols-3 gap-5">
           {SCENES.map((s, i) => (
             <div
               key={i}
               className={`rounded-2xl overflow-hidden flex flex-col shadow-sm ${s.dark ? "bg-[#1d1d1f]" : "bg-white"}`}
             >
-              {/* 漫画图 */}
-              <div className="h-[45%] overflow-hidden shrink-0">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={s.img}
-                  alt={s.problem}
-                  className="w-full h-full object-cover object-top"
-                />
-              </div>
+              {/* 漫画图：固定高度 */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={s.img}
+                alt={s.problem}
+                className="w-full object-cover object-top shrink-0"
+                style={{ height: "220px" }}
+              />
 
               {/* 文字 */}
-              <div className="flex-1 flex flex-col p-5 min-h-0">
-                <p className="text-[#f97316] text-[11px] font-semibold tracking-widest uppercase mb-2">
+              <div className="flex flex-col gap-3 p-5">
+                <p className="text-[#f97316] text-[11px] font-semibold tracking-widest uppercase">
                   {s.label}
                 </p>
-                <h2 className={`text-base font-bold leading-snug mb-2 ${s.dark ? "text-white" : "text-[#1d1d1f]"}`}>
+                <h2 className={`text-base font-bold leading-snug ${s.dark ? "text-white" : "text-[#1d1d1f]"}`}>
                   {s.problem}
                 </h2>
-                <p className={`text-xs leading-relaxed mb-3 ${s.dark ? "text-[#a1a1a6]" : "text-[#6e6e73]"}`}>
+                <p className={`text-xs leading-relaxed ${s.dark ? "text-[#a1a1a6]" : "text-[#6e6e73]"}`}>
                   {s.desc}
                 </p>
 
                 {/* 解法 */}
-                <div className={`mt-auto rounded-xl p-4 border ${s.dark ? "bg-white/[0.06] border-white/[0.08]" : "bg-[#f5f5f7] border-black/[0.04]"}`}>
+                <div className={`rounded-xl p-4 border ${s.dark ? "bg-white/[0.06] border-white/[0.08]" : "bg-[#f5f5f7] border-black/[0.04]"}`}>
                   <p className="text-[#f97316] text-[10px] font-semibold tracking-widest uppercase mb-1.5">
                     商图智造的解法
                   </p>
