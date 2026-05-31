@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { useState } from "react";
 
 const SCENES = [
   {
@@ -32,11 +33,14 @@ const SCENES = [
 ];
 
 export default function OBPage() {
+  const [active, setActive] = useState(0);
+  const s = SCENES[active];
+
   return (
     <div className="h-screen bg-[#f5f5f7] flex flex-col font-sans overflow-hidden">
 
       {/* ── Nav ── */}
-      <nav className="shrink-0 bg-white/80 backdrop-blur-xl border-b border-black/[0.08] z-50">
+      <nav className="shrink-0 bg-white/80 backdrop-blur-xl border-b border-black/[0.08]">
         <div className="max-w-6xl mx-auto px-8 h-12 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 rounded-md bg-[#f97316] flex items-center justify-center">
@@ -57,60 +61,84 @@ export default function OBPage() {
       </nav>
 
       {/* ── Hero ── */}
-      <div className="shrink-0 pt-8 pb-6 px-8 text-center bg-white">
-        <h1 className="text-2xl md:text-3xl font-bold text-[#1d1d1f] tracking-tight mb-2">
+      <div className="shrink-0 pt-6 pb-4 px-8 text-center bg-white border-b border-black/[0.06]">
+        <h1 className="text-2xl font-bold text-[#1d1d1f] tracking-tight mb-1">
           困扰电商人的 3 个日常难题
         </h1>
-        <p className="text-base text-[#6e6e73]">
+        <p className="text-sm text-[#6e6e73]">
           从出图到上架，耗时又费力，交给我们，让上新变得简单点～
         </p>
       </div>
 
-      {/* ── Scenes Grid ── */}
-      <div className="flex-1 px-6 py-5">
-        <div className="max-w-6xl mx-auto grid grid-cols-3 gap-5">
-          {SCENES.map((s, i) => (
-            <div
-              key={i}
-              className={`rounded-2xl overflow-hidden flex flex-col shadow-sm ${s.dark ? "bg-[#1d1d1f]" : "bg-white"}`}
-            >
-              {/* 漫画图：固定高度 */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={s.img}
-                alt={s.problem}
-                className="w-full object-cover object-top shrink-0"
-                style={{ height: "220px" }}
-              />
+      {/* ── Card Carousel ── */}
+      <div className="flex-1 flex items-center justify-center px-12 py-6 min-h-0 relative">
 
-              {/* 文字 */}
-              <div className="flex flex-col gap-3 p-5">
-                <p className="text-[#f97316] text-[11px] font-semibold tracking-widest uppercase">
-                  {s.label}
-                </p>
-                <h2 className={`text-base font-bold leading-snug ${s.dark ? "text-white" : "text-[#1d1d1f]"}`}>
-                  {s.problem}
-                </h2>
-                <p className={`text-xs leading-relaxed ${s.dark ? "text-[#a1a1a6]" : "text-[#6e6e73]"}`}>
-                  {s.desc}
-                </p>
+        {/* 左箭头 */}
+        <button
+          onClick={() => setActive((active - 1 + SCENES.length) % SCENES.length)}
+          className="absolute left-4 z-10 w-9 h-9 rounded-full bg-white shadow-md border border-black/[0.06] flex items-center justify-center hover:shadow-lg transition-shadow"
+        >
+          <svg className="w-4 h-4 text-[#1d1d1f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
 
-                {/* 解法 */}
-                <div className={`rounded-xl p-4 border ${s.dark ? "bg-white/[0.06] border-white/[0.08]" : "bg-[#f5f5f7] border-black/[0.04]"}`}>
-                  <p className="text-[#f97316] text-[10px] font-semibold tracking-widest uppercase mb-1.5">
-                    商图智造的解法
-                  </p>
-                  <p className={`text-sm font-bold mb-1 ${s.dark ? "text-white" : "text-[#1d1d1f]"}`}>
-                    {s.fix}
-                  </p>
-                  <p className={`text-xs leading-relaxed ${s.dark ? "text-[#a1a1a6]" : "text-[#6e6e73]"}`}>
-                    {s.fixDesc}
-                  </p>
-                </div>
-              </div>
+        {/* 卡片 */}
+        <div
+          className={`w-full max-w-lg h-full rounded-3xl overflow-hidden flex flex-col shadow-xl transition-all duration-300 ${s.dark ? "bg-[#1d1d1f]" : "bg-white"}`}
+        >
+          {/* 图片区 */}
+          <div className="w-full flex-shrink-0" style={{ height: "55%" }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={s.img}
+              alt={s.problem}
+              className="w-full h-full object-cover object-top"
+            />
+          </div>
+
+          {/* 文字区 */}
+          <div className="flex flex-col gap-3 p-6" style={{ height: "45%" }}>
+            <p className="text-[#f97316] text-[11px] font-semibold tracking-widest uppercase">
+              {s.label}
+            </p>
+            <h2 className={`text-xl font-bold leading-snug ${s.dark ? "text-white" : "text-[#1d1d1f]"}`}>
+              {s.problem}
+            </h2>
+            <p className={`text-sm leading-relaxed ${s.dark ? "text-[#a1a1a6]" : "text-[#6e6e73]"}`}>
+              {s.desc}
+            </p>
+            <div className={`rounded-2xl px-5 py-4 border ${s.dark ? "bg-white/[0.06] border-white/[0.08]" : "bg-[#f5f5f7] border-black/[0.04]"}`}>
+              <p className="text-[#f97316] text-[10px] font-semibold tracking-widest uppercase mb-1">
+                商图智造的解法 · {s.fix}
+              </p>
+              <p className={`text-sm leading-relaxed ${s.dark ? "text-[#a1a1a6]" : "text-[#6e6e73]"}`}>
+                {s.fixDesc}
+              </p>
             </div>
-          ))}
+          </div>
         </div>
+
+        {/* 右箭头 */}
+        <button
+          onClick={() => setActive((active + 1) % SCENES.length)}
+          className="absolute right-4 z-10 w-9 h-9 rounded-full bg-white shadow-md border border-black/[0.06] flex items-center justify-center hover:shadow-lg transition-shadow"
+        >
+          <svg className="w-4 h-4 text-[#1d1d1f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+
+      {/* ── Dots ── */}
+      <div className="shrink-0 flex items-center justify-center gap-2 pb-4">
+        {SCENES.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setActive(i)}
+            className={`rounded-full transition-all duration-200 ${i === active ? "w-5 h-2 bg-[#f97316]" : "w-2 h-2 bg-black/20"}`}
+          />
+        ))}
       </div>
 
       {/* ── Footer ── */}
