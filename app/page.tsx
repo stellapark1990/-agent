@@ -2080,7 +2080,12 @@ export default function Home() {
                     <h2 className="text-xl font-semibold text-[#0b1c30] flex items-center gap-2.5">
                       图片预览
                       {generatingSlots.size > 0 && (
-                        <span className="text-xs font-normal text-[#f97316] animate-pulse">{generatingSlots.size} 张生成中</span>
+                        <span className="text-xs font-normal text-[#f97316] animate-pulse">
+                          已完成 {Object.keys(generatedImages).length}/{analysis?.imageScripts.length ?? 5} · AI 生图约 30s
+                        </span>
+                      )}
+                      {generatingSlots.size === 0 && Object.keys(generatedImages).length > 0 && (
+                        <span className="text-xs font-normal text-[#22c55e]">✓ 全部生成完成</span>
                       )}
                     </h2>
                     <button onClick={handleBatchDownload} disabled={Object.keys(generatedImages).length === 0}
@@ -2190,7 +2195,12 @@ export default function Home() {
                       <h2 className="text-xl font-semibold text-[#0b1c30] flex items-center gap-2.5">
                         图片预览
                         {generatingSlots.size > 0 && (
-                          <span className="text-xs font-normal text-[#f97316] animate-pulse">{generatingSlots.size} 张生成中</span>
+                          <span className="text-xs font-normal text-[#f97316] animate-pulse">
+                            已完成 {Object.keys(generatedImages).length}/{analysis?.imageScripts.length ?? 5} · AI 生图约 30s
+                          </span>
+                        )}
+                        {generatingSlots.size === 0 && Object.keys(generatedImages).length > 0 && (
+                          <span className="text-xs font-normal text-[#22c55e]">✓ 全部生成完成</span>
                         )}
                       </h2>
                       <div className="flex items-center gap-2.5">

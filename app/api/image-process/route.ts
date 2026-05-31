@@ -8,9 +8,9 @@ const API_KEY = process.env.DASHSCOPE_API_KEY!;
 
 // ─── DashScope 工具 ──────────────────────────────────────────────────────────
 
-async function pollDashScope(taskId: string, maxTries = 15): Promise<string> {
+async function pollDashScope(taskId: string, maxTries = 20): Promise<string> {
   for (let i = 0; i < maxTries; i++) {
-    await new Promise((r) => setTimeout(r, 3000));
+    await new Promise((r) => setTimeout(r, 2000));
     const res = await fetch(`https://dashscope.aliyuncs.com/api/v1/tasks/${taskId}`, {
       headers: { Authorization: `Bearer ${API_KEY}` },
     });
