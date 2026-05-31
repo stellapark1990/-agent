@@ -1,4 +1,6 @@
 import OpenAI from "openai";
+import type { ChatCompletion } from "openai/resources/chat/completions";
+import type { ChatCompletionCreateParamsNonStreaming } from "openai/resources/chat/completions";
 
 function getQwen() {
   return new OpenAI({
@@ -10,8 +12,8 @@ function getQwen() {
 export const qwen = {
   chat: {
     completions: {
-      create: (...args: Parameters<OpenAI["chat"]["completions"]["create"]>) =>
-        getQwen().chat.completions.create(...args),
+      create: (params: ChatCompletionCreateParamsNonStreaming): Promise<ChatCompletion> =>
+        getQwen().chat.completions.create(params) as Promise<ChatCompletion>,
     },
   },
 };
