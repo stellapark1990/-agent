@@ -33,10 +33,10 @@ const SCENES = [
 
 export default function OBPage() {
   return (
-    <div className="min-h-screen bg-white flex flex-col font-sans">
+    <div className="h-screen bg-[#f5f5f7] flex flex-col font-sans overflow-hidden">
 
       {/* ── Nav ── */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/72 backdrop-blur-xl border-b border-black/[0.08]">
+      <nav className="shrink-0 bg-white/80 backdrop-blur-xl border-b border-black/[0.08] z-50">
         <div className="max-w-6xl mx-auto px-8 h-12 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 rounded-md bg-[#f97316] flex items-center justify-center">
@@ -57,74 +57,70 @@ export default function OBPage() {
       </nav>
 
       {/* ── Hero ── */}
-      <section className="pt-24 pb-14 px-8 text-center bg-white">
-        <h1 className="text-3xl md:text-4xl font-bold text-[#1d1d1f] leading-[1.08] tracking-tight mb-4 max-w-3xl mx-auto">
+      <div className="shrink-0 pt-8 pb-6 px-8 text-center bg-white">
+        <h1 className="text-2xl md:text-3xl font-bold text-[#1d1d1f] tracking-tight mb-2">
           困扰电商人的 3 个日常难题
         </h1>
-        <p className="text-xl text-[#6e6e73] max-w-2xl mx-auto leading-relaxed">
+        <p className="text-base text-[#6e6e73]">
           从出图到上架，耗时又费力，交给我们，让上新变得简单点～
         </p>
-      </section>
+      </div>
 
-      {/* ── Scenes ── */}
-      {SCENES.map((s, i) => (
-        <section
-          key={i}
-          className={`py-24 px-8 ${s.dark ? "bg-[#1d1d1f]" : "bg-[#f5f5f7]"}`}
-        >
-          <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-16"
-            style={{ flexDirection: i % 2 === 1 ? "row-reverse" : "row" } as React.CSSProperties}
-          >
-            {/* 漫画图 */}
-            <div className="md:w-[380px] shrink-0">
-              <div className={`rounded-3xl overflow-hidden shadow-2xl ${s.dark ? "shadow-black/40" : "shadow-black/10"}`}>
+      {/* ── Scenes Grid ── */}
+      <div className="flex-1 px-6 py-5 min-h-0">
+        <div className="max-w-6xl mx-auto h-full grid grid-cols-3 gap-5">
+          {SCENES.map((s, i) => (
+            <div
+              key={i}
+              className={`rounded-2xl overflow-hidden flex flex-col shadow-sm ${s.dark ? "bg-[#1d1d1f]" : "bg-white"}`}
+            >
+              {/* 漫画图 */}
+              <div className="h-[45%] overflow-hidden shrink-0">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={s.img}
                   alt={s.problem}
-                  className="w-full object-cover"
-                  style={{ aspectRatio: "3/4" }}
+                  className="w-full h-full object-cover object-top"
                 />
               </div>
-            </div>
 
-            {/* 文字 */}
-            <div className="flex-1 space-y-8">
-              <div>
-                <p className={`text-sm font-semibold tracking-widest uppercase mb-4 ${s.dark ? "text-[#f97316]" : "text-[#f97316]"}`}>
+              {/* 文字 */}
+              <div className="flex-1 flex flex-col p-5 min-h-0">
+                <p className="text-[#f97316] text-[11px] font-semibold tracking-widest uppercase mb-2">
                   {s.label}
                 </p>
-                <h2 className={`text-3xl md:text-4xl font-bold leading-tight tracking-tight mb-5 ${s.dark ? "text-white" : "text-[#1d1d1f]"}`}>
+                <h2 className={`text-base font-bold leading-snug mb-2 ${s.dark ? "text-white" : "text-[#1d1d1f]"}`}>
                   {s.problem}
                 </h2>
-                <p className={`text-lg leading-relaxed ${s.dark ? "text-[#a1a1a6]" : "text-[#6e6e73]"}`}>
+                <p className={`text-xs leading-relaxed mb-3 ${s.dark ? "text-[#a1a1a6]" : "text-[#6e6e73]"}`}>
                   {s.desc}
                 </p>
-              </div>
 
-              {/* 解法 */}
-              <div className={`rounded-2xl p-6 border ${s.dark ? "bg-white/[0.06] border-white/[0.1]" : "bg-white border-black/[0.06]"}`}>
-                <p className="text-[#f97316] text-xs font-semibold tracking-widest uppercase mb-3">
-                  商图智造的解法
-                </p>
-                <p className={`text-xl font-bold mb-2 ${s.dark ? "text-white" : "text-[#1d1d1f]"}`}>
-                  {s.fix}
-                </p>
-                <p className={`text-sm leading-relaxed ${s.dark ? "text-[#a1a1a6]" : "text-[#6e6e73]"}`}>
-                  {s.fixDesc}
-                </p>
+                {/* 解法 */}
+                <div className={`mt-auto rounded-xl p-4 border ${s.dark ? "bg-white/[0.06] border-white/[0.08]" : "bg-[#f5f5f7] border-black/[0.04]"}`}>
+                  <p className="text-[#f97316] text-[10px] font-semibold tracking-widest uppercase mb-1.5">
+                    商图智造的解法
+                  </p>
+                  <p className={`text-sm font-bold mb-1 ${s.dark ? "text-white" : "text-[#1d1d1f]"}`}>
+                    {s.fix}
+                  </p>
+                  <p className={`text-xs leading-relaxed ${s.dark ? "text-[#a1a1a6]" : "text-[#6e6e73]"}`}>
+                    {s.fixDesc}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        </section>
-      ))}
+          ))}
+        </div>
+      </div>
 
-{/* ── Footer ── */}
-      <footer className="border-t border-black/[0.08] py-6 px-8">
+      {/* ── Footer ── */}
+      <div className="shrink-0 border-t border-black/[0.06] py-3 px-8 bg-white">
         <p className="text-center text-[#b0b0b5] text-xs">
           © 2026 商图智造 · Powered by Qwen
         </p>
-      </footer>
+      </div>
+
     </div>
   );
 }
